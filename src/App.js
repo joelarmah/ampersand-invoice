@@ -4,6 +4,9 @@ import InvoicePreview from './pages/InvoicePreview';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 
+// Theme
+import './index.css';
+
 function App() {
   return (
     <Routes>

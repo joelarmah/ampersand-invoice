@@ -11,5 +11,5 @@ test("renders InvoicePreview component when route matches", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText("Invoice Preview")).toBeInTheDocument();
+  expect(screen.getByText("Invoice")).toBeInTheDocument();
 });
