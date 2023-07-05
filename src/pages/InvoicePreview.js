@@ -5,7 +5,7 @@ const InvoicePreview = () => {
     <>
       <section className='bg-gray-100 py-20'>
         <div className='max-w-2xl mx-auto py-0'>
-          <article className='shadow-none md:shadow-md md:rounded-md mb-4 overflow-hidden'>
+          <article className='shadow-none md:shadow-md md:rounded-md mb-4 overflow-hidden print:hidden'>
             <div className='md:rounded-b-md bg-white'>
               <div className='p-6 border-b border-gray-200'>
                 <div className='space-y-6'>
@@ -20,6 +20,7 @@ const InvoicePreview = () => {
                     <div className='download'>
                       <button
                         href='/'
+						onClick={() => window.print() }
                         className='inline-flex items-center py-2 px-4 text-sm font-medium text-blue-500 hover:opacity-75'>
                         Download PDF
                         <svg
