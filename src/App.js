@@ -11,7 +11,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home/>} />
-      <Route path="/:id" element={<InvoicePreview/>} />
+      <Route path="/invoice/:id" element={<InvoicePreview/>} />
       <Route path="*" element={<NotFound/>} />
     </Routes>
   );
