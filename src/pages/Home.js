@@ -8,13 +8,14 @@ import CreateInvoice from "../components/CreateInvoice";
 import { Button } from "flowbite-react";
 
 const Home = () => {
+  
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState([]);
-  const navigation = [{ name: "Create Invoice", href: "/invoice/create" }];
+  // const navigation = [{ name: "Create Invoice", href: "/invoice/create" }];
 
   useEffect(() => {
     fetchInvoices().then((res) => {
-      console.log("res ==>", res);
+      console.log('fetchInvoice ==>', res)
       setInvoices(res);
     });
   }, []);
@@ -33,12 +34,11 @@ const Home = () => {
             <div className='flex lg:hidden'>
               <button
                 type='button'
-                className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700'
-              >
+                className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700'>
                 <span className='sr-only'>Open main menu</span>
               </button>
             </div>
-            <div className='hidden lg:flex lg:gap-x-12'>
+            {/* <div className='hidden lg:flex lg:gap-x-12'>
               {navigation.map((item) => (
                 <a
                   key={item.name}
@@ -48,7 +48,7 @@ const Home = () => {
                   {item.name}
                 </a>
               ))}
-            </div>
+            </div> */}
             <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
               <Button
                 onClick={() => setOpenModal(true)}

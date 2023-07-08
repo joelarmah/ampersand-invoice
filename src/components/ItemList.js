@@ -31,7 +31,7 @@ const ItemList = ({ props, arrayHelpers }) => {
               <tr key={index}>
                 <td colSpan='2' className='py-5 whitespace-nowrap space-x-1 flex items-center'>
                   <div>
-                    <FieldInput name={`items[${index}].itemName`} />
+                    <FieldInput name={`items[${index}].name`} />
                     {/* <p className='text-sm text-gray-400'> Nuclear-armed ICBM </p> */}
                   </div>
                 </td>
@@ -69,11 +69,11 @@ const ItemList = ({ props, arrayHelpers }) => {
         type='button'
         onClick={() =>
           arrayHelpers.push({
-            itemName: "",
-            qty: 0,
-            price: 0,
+            name: "",
+            qty: 1,
+            price: null,
             total: "",
-            id: uuidv4(),
+            id: uuidv4()
           })
         }>
         <svg

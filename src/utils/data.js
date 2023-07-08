@@ -2,14 +2,14 @@ import moment from "moment";
 import * as Yup from "yup";
 
 const initialFormValues = {
-  invoiceNumber: "1",
+  invoiceNumber: Math.floor((Math.random() * 10) + 1),
   invoiceDate: moment().format("DD MM yyyy"),
   company: {
-    name: "",
-    address: "",
-    email:"",
-    phone:"",
-    city: "",
+    name: "Ampersand",
+    address: "GM Plaza",
+    email:"team@ampersand.com",
+    phone:"0559612394",
+    city: "Accra",
   },
   customer: {
     name: "",
@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "An item must be added")
     .of(
       Yup.object().shape({
-        itemName: Yup.string().required("*required"),
+        name: Yup.string().required("*required"),
         qty: Yup.number("").required("*required"),
         price: Yup.number("").required("*required"),
       }),

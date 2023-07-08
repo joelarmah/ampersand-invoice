@@ -12,7 +12,7 @@ import {
   sendEmailVerification,
   signInAnonymously,
 } from 'firebase/auth';
-import { getFirestore, query, getDocs, collection, where, addDoc, setDoc, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, query, getDocs, collection, where, addDoc, setDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { INVOICES } from './constants/firebaseConstants';
 
 const firebaseConfig = {
@@ -128,8 +128,9 @@ const logout = () => {
 
 const addInvoice = async (invoice) => {
   try {
-    const invoiceRef = await addDoc(collection(db, INVOICES), {...invoice});
-    console.log(`Invoice Ref ==> ${JSON.stringify(invoiceRef)}`)
+    const invoiceRef = await addDoc(collection(db, INVOICES), {...invoice, createdAt: Timestamp.fromDate(new Date())
+    });
+    return {...invoice, id: invoiceRef.id}
   } catch (err) {
     throw handleFirebaseError(err);
   }

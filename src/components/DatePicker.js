@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import moment from "moment";
+// import moment from "moment";
 import Datepicker from "tailwind-datepicker-react"
+import { formatDate } from "../utils/dateUtil";
 
 const DatePicker = ({ props, invoiceDate }) => {
 
@@ -34,16 +35,17 @@ const DatePicker = ({ props, invoiceDate }) => {
   }
   const [show, setShow] = useState(false)
 	const handleChange = (selectedDate) => {
-		console.log(selectedDate)
-    setDate(selectedDate);
-    props.setFieldValue("invoiceDate", moment(selectedDate).format("DD MMM yyyy"));
+    const formattedDate = formatDate(selectedDate);
+    console.log('selectedDate', formattedDate);
+    setDate(formattedDate);
+    props.setFieldValue("invoiceDate", formattedDate);
 	}
 	const handleClose = (state) => {
-		setShow(state)
+		setShow(state);
 	}
 
   useEffect(() => {
-    props.setFieldValue("invoiceDate", moment(date).format("DD MMM yyyy"));
+    props.setFieldValue("invoiceDate", formatDate(date));
   }, []);
 
   return (

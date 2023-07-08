@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import { fetchInvoiceById } from "../firebase";
 import { useParams } from "react-router-dom";
-import { APP_NAME } from "./../constants/appConstants.js";
+import { APP_NAME, CURRENCY } from "./../constants/appConstants.js";
 import EmptyState from "../components/EmptyState";
+import Header from "../components/Header";
+import { formatDate } from "../utils/dateUtil";
+import { getSubTotal, getTotal, itemTotal } from "../utils/utils";
 
 const InvoicePreview = () => {
-  
+
   const { id } = useParams();
   const [invoice, setInvoice] = useState(null);
 
@@ -26,6 +29,7 @@ const InvoicePreview = () => {
 
   return (
     <>
+      <Header />
       {!invoice && (
         <section className='h-full py-20'>
           <div className='max-w-2xl mx-auto py-0'>
@@ -53,21 +57,18 @@ const InvoicePreview = () => {
                       <div className='make-payment '>
                         <button
                           onClick={makePayment}
-                          className='rounded-full bg-sky-500 py-2 px-4 inline-flex items-center text-sm font-medium text-white hover:opacity-75'
-                        >
+                          className='rounded-full bg-sky-500 py-2 px-4 inline-flex items-center text-sm font-medium text-white hover:opacity-75'>
                           Make Payment
                         </button>
                       </div>
                       <div className='download'>
                         <button
                           onClick={() => window.print()}
-                          className='inline-flex items-center py-2 px-4 text-sm font-medium text-blue-500 hover:opacity-75'
-                        >
+                          className='inline-flex items-center py-2 px-4 text-sm font-medium text-blue-500 hover:opacity-75'>
                           <svg
                             className='mr-0.5 h-4 w-4 fill-current'
                             xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 20 20'
-                          >
+                            viewBox='0 0 20 20'>
                             <path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z' />
                           </svg>
                           Download PDF
@@ -87,14 +88,16 @@ const InvoicePreview = () => {
                       <div className='space-y-4'>
                         <div>
                           <img className='h-6 object-cover mb-1' src={logo} alt='Company Name' />
-                          <p>Company Name</p>
+                          <p>{invoice.company.name}</p>
                         </div>
                         <div>
-                          <p className='font-medium text-sm text-gray-400'>Billed To</p>
-                          <p>Mr. Drew</p>
-                          <p>drew@xyz.com </p>
-                          <p>0244245902</p>
-                          <p>SSNIT Flats, Adenta</p>
+                          <p className='font-medium text-sm text-gray-400'>Customer</p>
+                          <p>{invoice.customer.name}</p>
+                          <p>{invoice.customer.email}</p>
+                          <p>{invoice.customer.phone}</p>
+                          <p>
+                            {invoice.customer.address} {invoice.customer.city}
+                          </p>
                         </div>
                       </div>
 
@@ -102,18 +105,19 @@ const InvoicePreview = () => {
                         <div>
                           <h1 className='font-bold text-xl'>Invoice</h1>
                         </div>
-
+itemTotal
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Invoice Number</p>
-                          <p> INV-MJ0001 </p>
+                          <p>INV-{invoice.invoiceNumber} </p>
                         </div>
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Invoice Date</p>
-                          <p>June 30, 2023</p>
+                          {/* <p>{invoice.invoiceDate}</p> */}
+                          <p>{formatDate(invoice.invoiceDate, "DD MMM yyyy")}</p>
                         </div>
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Payment Due</p>
-                          <p>July 3, 2023</p>
+                          <p>{invoice.dueDate}</p>
                         </div>
                       </div>
                     </div>
@@ -127,7 +131,7 @@ const InvoicePreview = () => {
                         Item
                       </th>
                       <th scope='col' className='py-3 text-left font-semibold text-gray-400'>
-                        {" "}
+                        Qty
                       </th>
                       <th scope='col' className='py-3 text-left font-semibold text-gray-400'>
                         Price
@@ -139,28 +143,26 @@ const InvoicePreview = () => {
                     </tr>
                   </thead>
                   <tbody className='divide-y divide-gray-200'>
-                    <tr>
-                      <td className='px-9 py-5 whitespace-nowrap space-x-1 flex items-center'>
-                        <div>
-                          <p> Jericho III (YA-4) </p>
-                          <p className='text-sm text-gray-400'> Nuclear-armed ICBM </p>
-                        </div>
-                      </td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'></td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'> ¢380,000.00 </td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'> 0% </td>
-                    </tr>
-                    <tr>
-                      <td className='px-9 py-5 whitespace-nowrap space-x-1 flex items-center'>
-                        <div>
-                          <p> Pym Particles (Pack of 10,000) </p>
-                          <p className='text-sm text-gray-400'> Redacted Description </p>
-                        </div>
-                      </td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'></td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'> ¢280,000.00 </td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'> 0% </td>
-                    </tr>
+                    {invoice.items.map((item) => (
+                      <tr key={item.id}>
+                        <td className='px-9 py-5 whitespace-nowrap space-x-1 flex items-center'>
+                          <div>
+                            <p>{item.name}</p>
+                            <p className='text-sm text-gray-400'>{item.description}</p>
+                          </div>
+                        </td>
+                        <td className='whitespace-nowrap text-gray-600 truncate'>{item.qty}</td>
+                        <td className='whitespace-nowrap text-gray-600 truncate'>
+                          {CURRENCY}
+                          {item.price}
+                        </td>
+                        <td className='whitespace-nowrap text-gray-600 truncate'>
+                          {CURRENCY}
+                          {itemTotal(item)}
+                        </td>
+                      </tr>
+                    ))}
+
                     <tr>
                       <td
                         className='px-9 py-5 whitespace-nowrap space-x-1 flex items-center'
@@ -168,7 +170,10 @@ const InvoicePreview = () => {
                       ></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'>Subtotal</td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'>¢660,000.00</td>
+                      <td className='whitespace-nowrap text-gray-600 truncate'>
+                        {CURRENCY}
+                        {getSubTotal(invoice.items)}
+                      </td>
                     </tr>
                     <tr>
                       <td
@@ -177,7 +182,7 @@ const InvoicePreview = () => {
                       ></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'>Tax</td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'>¢0</td>
+                      <td className='whitespace-nowrap text-gray-600 truncate'>{CURRENCY}0</td>
                     </tr>
                     <tr>
                       <td
@@ -186,7 +191,10 @@ const InvoicePreview = () => {
                       ></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'></td>
                       <td className='whitespace-nowrap text-gray-600 truncate'>Total</td>
-                      <td className='whitespace-nowrap text-gray-600 truncate'>¢0</td>
+                      <td className='whitespace-nowrap text-gray-600 truncate'>
+                        {CURRENCY}
+                        {getTotal(invoice.items)}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -195,9 +203,12 @@ const InvoicePreview = () => {
                   <div className='space-y-3'>
                     <div className='flex justify-between'>
                       <div>
-                        <p className='font-bold text-black text-lg'> Amount Due </p>
+                        <p className='font-bold text-black text-lg'>Amount Due</p>
                       </div>
-                      <p className='font-bold text-black text-lg'> ¢360.00 </p>
+                      <p className='font-bold text-black text-lg'>
+                        {CURRENCY}
+                        {getTotal(invoice.items)}
+                      </p>
                     </div>
                   </div>
                 </div>
