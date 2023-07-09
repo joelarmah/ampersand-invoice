@@ -1,6 +1,6 @@
 <div align="center">
-    <a href="properties.ampersandllc.co">
-        <img src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-receipt-icon-png-image_927096.jpg" height="128">
+    <a href="https://customer-keeper-9fa35.web.app/">
+        <img src="https://customer-keeper-9fa35.web.app/static/media/logo.079d8782cf2fdca66bef.png" height="128">
     </a>
     <h2>Invoice Preview for Customer Keeper</h2>
     <p align="center">
