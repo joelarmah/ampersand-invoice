@@ -77,9 +77,6 @@ const registerWithEmailAndPassword = async (fullName, email, password) => {
     const user = res.user;
 
     await updateUserDisplayName(user, fullName)
-
-    // console.log(`currentUser ==> ${JSON.stringify(auth.currentUser)}`)
-
     const newUser = getNewUser(user, fullName)
 
     const docRef = doc(db, 'users', user.uid);

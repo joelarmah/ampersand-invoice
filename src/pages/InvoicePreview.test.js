@@ -1,5 +1,5 @@
 import { render, screen, act } from "@testing-library/react";
-import { useParams } from "react-router-dom";
+import { BrowserRouter, useParams } from "react-router-dom";
 import { fetchInvoiceById } from "../firebase";
 import InvoicePreview from "./InvoicePreview";
 
@@ -14,10 +14,39 @@ jest.mock("../firebase", () => ({
   fetchInvoiceById: jest.fn(),
 }));
 
+jest.mock("../utils/utils", () => ({
+  getSubTotal: jest.fn(),
+  getTotal: jest.fn(),
+  itemTotal: jest.fn(),
+}));
+
 describe("InvoicePreview component", () => {
   const mockInvoice = {
     id: "123456",
-    date: Date(),
+    invoiceNumber: 12,
+    invoiceDate: "8 July 2023",
+    company: {
+      name: "Ampersand",
+      address: "GM Plaza",
+      city: "Accra",
+      email: "team@ampersand.com",
+      phone: "0559612394",
+    },
+    customer: {
+      address: "Block 8A SSNIT Flats",
+      city: "Adenta",
+      email: "drew@gmail.com",
+      name: "Drew Barnes",
+      phone: "0241234556",
+    },
+    items: [
+      {
+        id: "098853",
+        name: "Item 1",
+        qty: "1",
+        price: "200",
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -28,7 +57,11 @@ describe("InvoicePreview component", () => {
 
   test("renders the Invoice Preview correctly", async () => {
     fetchInvoiceById.mockResolvedValue(mockInvoice);
-    render(<InvoicePreview />);
+    render(
+      <BrowserRouter>
+        <InvoicePreview />
+      </BrowserRouter>,
+    );
     await screen.findByText("Invoice");
     expect(screen.getByText("Invoice")).toBeInTheDocument();
   });
@@ -36,18 +69,25 @@ describe("InvoicePreview component", () => {
   test("renders empty state when invoice is not found", async () => {
     // Set the fetchInvoiceById function to return null
     fetchInvoiceById.mockResolvedValue(null);
-    render(<InvoicePreview />);
+    render(
+      <BrowserRouter>
+        <InvoicePreview />
+      </BrowserRouter>,
+    );
     // Verify that the empty state is rendered
     expect(screen.getByText("Invoice Not Found")).toBeInTheDocument();
   });
 
   test("renders invoice details when invoice is found", async () => {
     await act(async () => {
-      render(<InvoicePreview />);
+      render(
+        <BrowserRouter>
+          <InvoicePreview />
+        </BrowserRouter>,
+      );
       // Wait for the fetchInvoiceById promise to resolve
       await Promise.resolve();
     });
     expect(screen.getByText("Invoice")).toBeInTheDocument();
   });
-
 });

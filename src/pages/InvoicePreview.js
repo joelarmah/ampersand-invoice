@@ -105,7 +105,7 @@ const InvoicePreview = () => {
                         <div>
                           <h1 className='font-bold text-xl'>Invoice</h1>
                         </div>
-itemTotal
+
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Invoice Number</p>
                           <p>INV-{invoice.invoiceNumber} </p>
@@ -113,7 +113,7 @@ itemTotal
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Invoice Date</p>
                           {/* <p>{invoice.invoiceDate}</p> */}
-                          <p>{formatDate(invoice.invoiceDate, "DD MMM yyyy")}</p>
+                          <p>{formatDate(invoice.invoiceDate, "d MMM yyyy")}</p>
                         </div>
                         <div>
                           <p className='font-medium text-sm text-gray-400'>Payment Due</p>

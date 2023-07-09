@@ -30,6 +30,7 @@ jest.mock('firebase/firestore', () => ({
   getDocs: jest.fn(),
   doc: jest.fn(),
   getDoc: jest.fn(),
+  Timestamp: jest.fn()
 }));
 
 test("renders InvoicePreview component when route matches", () => {
@@ -39,5 +40,5 @@ test("renders InvoicePreview component when route matches", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText("Customer Keeper")).toBeInTheDocument();
+ expect(screen.getByText("Supercharge your business")).toBeInTheDocument();
 });
