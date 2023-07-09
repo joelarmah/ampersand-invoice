@@ -24,7 +24,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-console.log('firebaseConfig ==>', firebaseConfig);
+console.log('firebaseConfig ==>', JSON.stringify(firebaseConfig));
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
