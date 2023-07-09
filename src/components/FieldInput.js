@@ -1,0 +1,20 @@
+import { Field, getIn } from "formik";
+
+const FieldInput = ({ name }) => {
+    return (
+      <Field
+        name={name}
+        render={({ form }) => {
+          const error = getIn(form.errors, name);
+          const touch = getIn(form.touched, name);
+          return touch && error ? (
+            <Field name={name} className={"input2Error bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} />
+          ) : (
+            <Field name={name} className={"input2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} />
+          );
+        }}
+      />
+    );
+  };
+  
+  export default FieldInput;
